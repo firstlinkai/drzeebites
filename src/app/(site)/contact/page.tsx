@@ -9,6 +9,7 @@ export const revalidate = 3600
 
 export const metadata: Metadata = {
   title: 'Contact',
+  alternates: { canonical: '/contact' },
   description:
     'Questions about a recipe, your cookbook order, or working with DrZeeBites? Send us a message.',
 }

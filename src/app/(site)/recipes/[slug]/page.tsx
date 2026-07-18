@@ -12,6 +12,9 @@ import { mediaAlt, mediaUrl } from '@/components/media'
 import { IngredientsChecklist } from '@/components/recipes/IngredientsChecklist'
 import { RichContent } from '@/components/richtext/RichContent'
 import { getPayload } from '@/lib/payload'
+import { breadcrumbJsonLd, recipeJsonLd } from '@/lib/seo/jsonld'
+import { JsonLd } from '@/lib/seo/json-ld'
+import { pageMetadata } from '@/lib/seo/meta'
 import type { Category, Recipe } from '@/payload-types'
 
 export const revalidate = 300
@@ -45,12 +48,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const recipe = await getRecipe(slug)
   if (!recipe) return { title: 'Recipe not found' }
-  const og = mediaUrl(recipe.heroImage, 'og')
-  return {
+  return pageMetadata({
     title: recipe.title,
-    description: recipe.description ?? undefined,
-    openGraph: og ? { images: [{ url: og, width: 1200, height: 630 }] } : undefined,
-  }
+    description: recipe.description,
+    path: `/recipes/${recipe.slug}`,
+    image: mediaUrl(recipe.heroImage, 'og'),
+    ogType: 'article',
+  })
 }
 
 const DIFFICULTY_LABEL: Record<string, string> = {
@@ -111,39 +115,15 @@ export default async function RecipePage({ params }: Props) {
   const total = prep + cook
   const nutrition = recipe.nutrition
 
-  // schema.org Recipe JSON-LD
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Recipe',
-    name: recipe.title,
-    description: recipe.description ?? undefined,
-    image: heroUrl ?? undefined,
-    prepTime: prep ? `PT${prep}M` : undefined,
-    cookTime: cook ? `PT${cook}M` : undefined,
-    totalTime: total ? `PT${total}M` : undefined,
-    recipeYield: recipe.servings ? `${recipe.servings} servings` : undefined,
-    recipeCategory: categories.map((c) => c.name),
-    recipeIngredient: (recipe.ingredients ?? []).map((ing) =>
-      [ing.quantity, ing.unit, ing.item].filter(Boolean).join(' '),
-    ),
-    nutrition: nutrition
-      ? {
-          '@type': 'NutritionInformation',
-          calories: nutrition.calories != null ? `${nutrition.calories} calories` : undefined,
-          proteinContent: nutrition.protein != null ? `${nutrition.protein} g` : undefined,
-          carbohydrateContent: nutrition.netCarbs != null ? `${nutrition.netCarbs} g` : undefined,
-          fatContent: nutrition.fat != null ? `${nutrition.fat} g` : undefined,
-          fiberContent: nutrition.fiber != null ? `${nutrition.fiber} g` : undefined,
-        }
-      : undefined,
-    author: { '@type': 'Organization', name: 'DrZeeBites' },
-  }
-
   return (
     <article className="mx-auto max-w-6xl px-5 py-10 sm:px-8 md:py-14">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd data={recipeJsonLd(recipe)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Recipes', path: '/recipes' },
+          { name: recipe.title, path: `/recipes/${recipe.slug}` },
+        ])}
       />
 
       {/* ------------------------------------------------------------- Header */}

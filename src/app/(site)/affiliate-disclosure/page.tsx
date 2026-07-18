@@ -7,6 +7,7 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Affiliate Disclosure',
+  alternates: { canonical: '/affiliate-disclosure' },
   description:
     'How affiliate links work on DrZeeBites, including our participation in the Amazon Associates program.',
 }

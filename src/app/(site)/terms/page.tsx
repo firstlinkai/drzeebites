@@ -7,6 +7,7 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
+  alternates: { canonical: '/terms' },
   description: 'The terms that apply when you use drzeebites.com or buy our digital products.',
 }
 

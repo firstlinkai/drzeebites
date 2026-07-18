@@ -10,6 +10,7 @@ export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Shop',
+  alternates: { canonical: '/shop' },
   description:
     'Digital cookbooks and guides from DrZeeBites — diabetic-friendly air fryer recipes with complete nutrition facts. Instant PDF downloads.',
 }

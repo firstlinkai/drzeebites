@@ -8,6 +8,7 @@ export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Recipes',
+  alternates: { canonical: '/recipes' },
   description:
     'Free diabetic-friendly air fryer recipes — low carb, high protein, most ready in 15 minutes. Net carbs counted on every recipe.',
 }

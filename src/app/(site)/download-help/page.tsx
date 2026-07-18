@@ -6,8 +6,8 @@ import { ReRequestForm } from './ReRequestForm'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Download help — DrZeeBites',
-  robots: { index: false },
+  title: 'Download help',
+  robots: { index: false, follow: false },
 }
 
 const SUPPORT_EMAIL = 'hello@drzeebites.com'

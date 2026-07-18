@@ -7,6 +7,7 @@ export const revalidate = 86400
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
+  alternates: { canonical: '/privacy' },
   description: 'How DrZeeBites collects, uses, and protects your personal information.',
 }
 

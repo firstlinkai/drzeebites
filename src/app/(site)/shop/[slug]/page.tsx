@@ -10,6 +10,9 @@ import { mediaAlt, mediaUrl } from '@/components/media'
 import { RichContent } from '@/components/richtext/RichContent'
 import { TestimonialGrid } from '@/components/Testimonials'
 import { getPayload } from '@/lib/payload'
+import { breadcrumbJsonLd, productJsonLd } from '@/lib/seo/jsonld'
+import { JsonLd } from '@/lib/seo/json-ld'
+import { pageMetadata } from '@/lib/seo/meta'
 import type { Product } from '@/payload-types'
 
 export const revalidate = 300
@@ -49,12 +52,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const product = await getProduct(slug)
   if (!product) return { title: 'Product not found' }
-  const og = mediaUrl(product.gallery?.[0]?.image, 'og')
-  return {
+  return pageMetadata({
     title: product.name,
-    description: product.shortPitch ?? undefined,
-    openGraph: og ? { images: [{ url: og, width: 1200, height: 630 }] } : undefined,
-  }
+    description: product.shortPitch,
+    path: `/shop/${product.slug}`,
+    image: mediaUrl(product.gallery?.[0]?.image, 'og'),
+  })
 }
 
 const BENEFITS = [
@@ -131,6 +134,15 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <article className="mx-auto max-w-6xl px-5 py-12 sm:px-8 md:py-16">
+      <JsonLd data={productJsonLd(product)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Shop', path: '/shop' },
+          { name: product.name, path: `/shop/${product.slug}` },
+        ])}
+      />
+
       {/* ------------------------------------------------------- Top section */}
       <div className="grid items-start gap-10 lg:grid-cols-2 lg:gap-14">
         {/* Gallery */}

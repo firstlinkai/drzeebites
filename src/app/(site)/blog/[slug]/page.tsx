@@ -10,6 +10,9 @@ import { SubscribeForm } from '@/components/forms/SubscribeForm'
 import { mediaAlt, mediaUrl } from '@/components/media'
 import { RichContent } from '@/components/richtext/RichContent'
 import { getPayload } from '@/lib/payload'
+import { articleJsonLd, breadcrumbJsonLd } from '@/lib/seo/jsonld'
+import { JsonLd } from '@/lib/seo/json-ld'
+import { pageMetadata } from '@/lib/seo/meta'
 import type { Category, Post } from '@/payload-types'
 
 export const revalidate = 300
@@ -43,12 +46,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params
   const post = await getPost(slug)
   if (!post) return { title: 'Article not found' }
-  const og = mediaUrl(post.heroImage, 'og')
-  return {
+  return pageMetadata({
     title: post.title,
-    description: post.excerpt ?? undefined,
-    openGraph: og ? { images: [{ url: og, width: 1200, height: 630 }] } : undefined,
-  }
+    description: post.excerpt,
+    path: `/blog/${post.slug}`,
+    image: mediaUrl(post.heroImage, 'og'),
+    ogType: 'article',
+  })
 }
 
 export default async function BlogPostPage({ params }: Props) {
@@ -87,21 +91,15 @@ export default async function BlogPostPage({ params }: Props) {
       })
     : null
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    headline: post.title,
-    description: post.excerpt ?? undefined,
-    image: heroUrl ?? undefined,
-    datePublished: post.publishedAt ?? undefined,
-    author: { '@type': 'Organization', name: 'DrZeeBites' },
-  }
-
   return (
     <article className="mx-auto max-w-6xl px-5 py-10 sm:px-8 md:py-14">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      <JsonLd data={articleJsonLd(post)} />
+      <JsonLd
+        data={breadcrumbJsonLd([
+          { name: 'Home', path: '/' },
+          { name: 'Blog', path: '/blog' },
+          { name: post.title, path: `/blog/${post.slug}` },
+        ])}
       />
 
       <header className="mx-auto max-w-3xl text-center">

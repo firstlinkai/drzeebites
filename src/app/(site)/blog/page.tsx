@@ -7,6 +7,7 @@ export const revalidate = 300
 
 export const metadata: Metadata = {
   title: 'Blog',
+  alternates: { canonical: '/blog' },
   description:
     'Guides and articles on diabetic-friendly cooking, air fryer technique, and eating well with steady blood sugar.',
 }

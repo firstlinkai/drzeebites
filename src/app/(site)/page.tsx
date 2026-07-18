@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -7,8 +8,14 @@ import { SubscribeForm } from '@/components/forms/SubscribeForm'
 import { InstagramIcon, PinterestIcon, TikTokIcon } from '@/components/site/SocialIcons'
 import { TestimonialGrid } from '@/components/Testimonials'
 import { getPayload } from '@/lib/payload'
+import { organizationJsonLd, webSiteJsonLd } from '@/lib/seo/jsonld'
+import { JsonLd } from '@/lib/seo/json-ld'
 
 export const revalidate = 300
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 async function getHomeData() {
   const payload = await getPayload()
@@ -56,6 +63,9 @@ export default async function HomePage() {
 
   return (
     <>
+      <JsonLd data={webSiteJsonLd(settings)} />
+      <JsonLd data={organizationJsonLd(settings)} />
+
       {/* ------------------------------------------------------------- Hero */}
       <section className="relative overflow-hidden">
         {/* Soft brand wash behind the hero visual */}

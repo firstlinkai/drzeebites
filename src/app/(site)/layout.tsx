@@ -5,6 +5,13 @@ import React from 'react'
 import { Footer } from '@/components/site/Footer'
 import { Header } from '@/components/site/Header'
 import { getPayload } from '@/lib/payload'
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  DEFAULT_TITLE,
+  SITE_NAME,
+  SITE_URL,
+} from '@/lib/seo/site'
 
 import './globals.css'
 
@@ -22,26 +29,46 @@ const jakarta = Plus_Jakarta_Sans({
 
 const FALLBACK_COOKBOOK_SLUG = 'diabetic-air-fryer-cookbook'
 
-export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000'),
-  title: {
-    default: 'DrZeeBites — 15-Minute Diabetic-Friendly Air Fryer Recipes',
-    template: '%s — DrZeeBites',
-  },
-  description:
-    'Low-carb, high-protein, diabetic-friendly air fryer recipes ready in 15 minutes. Home of The Diabetic Air Fryer Cookbook.',
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: '48x48' },
-      { url: '/brand/icon.png', type: 'image/png', sizes: '512x512' },
-    ],
-    apple: '/brand/apple-icon.png',
-  },
-  openGraph: {
-    siteName: 'DrZeeBites',
-    type: 'website',
-    images: [{ url: '/brand/og-default.png', width: 1200, height: 630, alt: 'DrZeeBites' }],
-  },
+export async function generateMetadata(): Promise<Metadata> {
+  // Site-settings can override the default title/description; never let a
+  // CMS hiccup break metadata for the whole site.
+  let defaultSeo: { title?: string | null; description?: string | null } | null = null
+  try {
+    const payload = await getPayload()
+    const settings = await payload.findGlobal({ slug: 'site-settings', depth: 0 })
+    defaultSeo = settings?.defaultSeo ?? null
+  } catch {
+    defaultSeo = null
+  }
+
+  const title = defaultSeo?.title || DEFAULT_TITLE
+  const description = defaultSeo?.description || DEFAULT_DESCRIPTION
+
+  return {
+    metadataBase: new URL(SITE_URL),
+    title: {
+      default: title,
+      template: `%s | ${SITE_NAME}`,
+    },
+    description,
+    icons: {
+      icon: [
+        { url: '/favicon.ico', sizes: '48x48' },
+        { url: '/brand/icon.png', type: 'image/png', sizes: '512x512' },
+      ],
+      apple: '/brand/apple-icon.png',
+    },
+    openGraph: {
+      siteName: SITE_NAME,
+      type: 'website',
+      title,
+      description,
+      images: [{ url: DEFAULT_OG_IMAGE, width: 1200, height: 630, alt: SITE_NAME }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+    },
+  }
 }
 
 async function getChromeData() {

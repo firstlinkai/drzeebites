@@ -10,8 +10,8 @@ import type { Order, Product } from '@/payload-types'
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Thank you — DrZeeBites',
-  robots: { index: false },
+  title: 'Thank you',
+  robots: { index: false, follow: false },
 }
 
 const SUPPORT_EMAIL = 'hello@drzeebites.com'
