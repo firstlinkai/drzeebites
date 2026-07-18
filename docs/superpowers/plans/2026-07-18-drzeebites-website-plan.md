@@ -108,7 +108,26 @@ Real values live only in local `.env` and in the compose env on the VPS. Never c
 
 **Verify:** all tests green from a clean checkout following README steps.
 
-## Phase 7 — Production deployment (VPS)
+## Phase 7 — Production deployment (~~VPS~~ → **Vercel**; revised 2026-07-18)
+
+> **Revision:** User switched hosting to Vercel (token provided). Consequences:
+> - **Database:** dedicated `drzee-postgres` container (Postgres 16, TLS self-signed) runs on the user's VPS, published on port 5433; `drzee_dev` for local dev, `drzee_prod` for production. Vercel connects over TLS (`sslmode=no-verify` for node-pg with self-signed cert). Backups stay on the VPS (nightly `pg_dump`).
+> - **File storage:** Vercel's filesystem is ephemeral → media and product PDFs stored in **Vercel Blob** via `@payloadcms/storage-vercel-blob`, enabled only when `BLOB_READ_WRITE_TOKEN` is set; local dev uses disk storage. Paid PDFs use unguessable blob URLs that are never exposed — the `/download/[token]` route fetches and streams server-side.
+> - **Docker/Traefik/standalone output:** no longer needed for the app. Original VPS steps below are superseded.
+> - **DNS:** point drzeebites.com to Vercel (records provided by Vercel when the domain is added), not to the VPS.
+
+**Revised steps:**
+1. Create Vercel project via API/CLI (token in `.env`), link repo or deploy via `vercel deploy`.
+2. Create Vercel Blob store; set `BLOB_READ_WRITE_TOKEN` + all prod env vars (prod `DATABASE_URI` → `drzee_prod`, live Stripe keys, live webhook secret, `NEXT_PUBLIC_SERVER_URL=https://drzeebites.com`).
+3. Add drzeebites.com domain to the project; user adds the DNS records Vercel specifies at their registrar.
+4. Stripe live webhook endpoint → `https://drzeebites.com/api/webhooks/stripe`.
+5. Resend domain verification (SPF/DKIM) for drzeebites.com before launch emails; switch `EMAIL_FROM` to hello@drzeebites.com.
+6. Nightly `pg_dump` cron on VPS (14-day retention).
+7. Production smoke test: browse, live purchase + refund, download, subscribe, contact.
+
+<details><summary>Original VPS deployment steps (superseded)</summary>
+
+### Phase 7 (original) — Production deployment (VPS)
 
 1. Multi-stage `Dockerfile` (standalone build, non-root user, sharp included).
 2. `docker-compose.yml` (prod): `drzee-web` + `drzee-postgres`, named volumes (`db`, `media`, `private`), Traefik labels for `drzeebites.com` + `www` redirect on the existing `myresolver` certresolver, healthcheck.
@@ -117,6 +136,8 @@ Real values live only in local `.env` and in the compose env on the VPS. Never c
 5. Post-launch checklist: Gumroad → add site link; socials/link-in-bio point to drzeebites.com; Resend domain verification (SPF/DKIM) for `drzeebites.com` **before** launch emails.
 
 **Verify:** production smoke test on https://drzeebites.com — browse, test purchase (live mode, refunded), download, subscribe, contact. TLS valid, `www` redirects.
+
+</details>
 
 ---
 
