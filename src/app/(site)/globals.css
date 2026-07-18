@@ -1,0 +1,22 @@
+@import 'tailwindcss';
+
+/*
+ * DrZeeBites brand tokens (Tailwind v4 theme).
+ * Palette derived from the logo badge: deep olive green on warm cream,
+ * with terracotta + amber as warm food-forward accents.
+ */
+@theme {
+  --color-cream: #faf6ec;
+  --color-ink: #1f2921;
+  --color-primary: #4a5d2e;
+  --color-primary-hover: #3b4a25;
+  --color-primary-soft: #edf0e2;
+  --color-accent: #d97742;
+  --color-amber: #e0a458;
+}
+
+/* Fonts are provided at runtime by next/font (see (site)/layout.tsx). */
+@theme inline {
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-jakarta);
+}
