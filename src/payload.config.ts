@@ -35,9 +35,11 @@ if (process.env.BLOB_READ_WRITE_TOKEN) {
         media: true,
         'product-files': true,
       },
-      // Random suffix -> unguessable blob URLs; product-files access control
-      // still applies because reads go through Payload's file endpoint.
-      addRandomSuffix: true,
+      // Random suffix must stay OFF: the adapter suffixes only the main file's
+      // stored name, not resized variants, so variant URLs 404. Access control
+      // is unaffected — reads go through Payload's file endpoint, and the blob
+      // store host itself is never exposed to visitors.
+      addRandomSuffix: false,
       token: process.env.BLOB_READ_WRITE_TOKEN,
     }),
   )
