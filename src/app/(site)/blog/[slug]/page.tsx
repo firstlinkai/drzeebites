@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
-import type { SerializedEditorState } from '@payloadcms/richtext-lexical'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
 import { PostCard } from '@/components/cards/PostCard'
 import { SubscribeForm } from '@/components/forms/SubscribeForm'

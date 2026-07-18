@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { notFound } from 'next/navigation'
 
-import type { SerializedEditorState } from '@payloadcms/richtext-lexical'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
 import { BuyButton } from '@/components/commerce/BuyButton'
 import { formatPrice } from '@/components/CookbookCta'

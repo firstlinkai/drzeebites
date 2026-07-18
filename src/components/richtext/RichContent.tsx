@@ -2,7 +2,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import type { SerializedBlockNode, SerializedEditorState } from '@payloadcms/richtext-lexical'
+import type { SerializedBlockNode } from '@payloadcms/richtext-lexical'
+import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 import { RichText, type JSXConvertersFunction } from '@payloadcms/richtext-lexical/react'
 
 import { mediaAlt, mediaUrl } from '@/components/media'

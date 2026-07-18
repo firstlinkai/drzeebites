@@ -56,7 +56,7 @@ export default async function ContactPage() {
               New 15-minute recipes are posted first on our social channels.
             </p>
             <SocialLinks
-              socialLinks={socialLinks}
+              socialLinks={socialLinks ?? undefined}
               className="mt-4 flex items-center gap-2 text-primary"
               iconClassName="h-6 w-6"
             />
