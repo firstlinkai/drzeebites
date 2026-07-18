@@ -52,6 +52,7 @@ One Next.js application with Payload 3 mounted inside it. Single deployable unit
 - **Orders** — created by Stripe webhook: email, product ref, amount, Stripe session ID, Stripe event ID (idempotency), download token, token expiry, download count, status.
 - **Subscribers** — email, source (homepage / recipe footer / etc.), created date; synced to a Resend Audience.
 - **ContactSubmissions** — name, email, subject, message, read flag.
+- **AffiliateLinks** — label, destination URL, click count; referenced by affiliate blocks and the `/go/[id]` redirect.
 - **Users** — admin accounts (auth-enabled collection).
 - **Media** — uploads with alt text, image resizing presets.
 - **SiteSettings (global)** — social links (Instagram, Pinterest, TikTok, Gumroad legacy), default SEO metadata, optional announcement bar.
