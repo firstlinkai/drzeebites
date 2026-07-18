@@ -85,6 +85,10 @@ test.describe('purchase flow (Stripe test mode)', () => {
     const res = await request.get(href as string)
     expect(res.status()).toBe(200)
     expect(res.headers()['content-type']).toContain('application/pdf')
-    expect((await res.body()).length).toBeGreaterThan(1000)
+    // Seeded placeholder PDF is ~620 bytes; the real cookbook will be MBs.
+    // Assert a valid PDF payload rather than a size the placeholder can't meet.
+    const body = await res.body()
+    expect(body.subarray(0, 5).toString()).toBe('%PDF-')
+    expect(body.length).toBeGreaterThan(300)
   })
 })
