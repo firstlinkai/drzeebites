@@ -12,3 +12,5 @@ test-results/
 docs/superpowers/.admin-credentials.md
 .vercel/
 next-env.d.ts
+.gstack/
+tsconfig.tsbuildinfo
