@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 
 import type { SerializedEditorState } from '@payloadcms/richtext-lexical/lexical'
 
-import { BuyButton } from '@/components/commerce/BuyButton'
+import { ProductCta } from '@/components/commerce/ProductCta'
 import { formatPrice } from '@/components/CookbookCta'
 import { mediaAlt, mediaUrl } from '@/components/media'
 import { RichContent } from '@/components/richtext/RichContent'
@@ -219,8 +219,9 @@ export default async function ProductPage({ params }: Props) {
               <span className="text-sm text-ink/60">one-time payment</span>
             </div>
             <div className="mt-4">
-              <BuyButton
+              <ProductCta
                 productId={String(product.id)}
+                slug={product.slug ?? ''}
                 label={`Get Instant Access — ${price}`}
                 className="w-full rounded-full bg-accent px-8 py-4 text-center text-lg font-semibold text-white shadow-md transition-colors hover:bg-accent/90 disabled:opacity-60"
               />
@@ -292,8 +293,9 @@ export default async function ProductPage({ params }: Props) {
           {product.name} — {price}, instant PDF download, yours forever.
         </p>
         <div className="mx-auto mt-6 max-w-xs">
-          <BuyButton
+          <ProductCta
             productId={String(product.id)}
+            slug={product.slug ?? ''}
             label={`Get Instant Access — ${price}`}
             className="w-full rounded-full bg-accent px-8 py-4 text-center text-base font-semibold text-white shadow-md transition-colors hover:bg-accent/90 disabled:opacity-60"
           />

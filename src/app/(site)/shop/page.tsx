@@ -38,6 +38,17 @@ export default async function ShopPage() {
         </p>
       </header>
 
+      <div className="relative mt-8 overflow-hidden rounded-3xl border border-primary/10 shadow-sm">
+        <Image
+          src="/brand/bundle-promo.jpg"
+          alt="The Ultimate Diabetic Air Fryer Bundle — both DrZeeBites cookbooks together for $35.99"
+          width={1280}
+          height={720}
+          className="h-auto w-full"
+          priority
+        />
+      </div>
+
       {products.docs.length > 0 ? (
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {products.docs.map((product, i) => {
