@@ -18,10 +18,14 @@ export function ProductCta({ productId, slug, label, className }: Props) {
   if (isFreeDownloadsMode()) {
     return (
       <div>
-        <a href={`/download-free/${slug}`} className={className} download>
+        {/* `block`: anchors are inline by default, and an inline element with
+            pill styling fragments into broken shapes when its text wraps. */}
+        <a href={`/download-free/${slug}`} className={`block ${className ?? ''}`} download>
           Download Free — Launch Preview
         </a>
-        <p className="mt-2 text-center text-xs text-ink/50">
+        {/* Inherit the surrounding text color so the note stays legible on
+            both the light card and the dark final-CTA section. */}
+        <p className="mt-2 text-center text-xs opacity-60">
           Free while we finish setting up checkout — enjoy!
         </p>
       </div>
